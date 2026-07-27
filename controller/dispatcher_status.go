@@ -12,7 +12,7 @@ import (
 // GetDispatcherStatus proxies the private dispatcher status endpoint so the
 // admin UI does not need direct access to the 961 host.
 func GetDispatcherStatus(c *gin.Context) {
-	statusURL := strings.TrimRight(common.GetEnvOrDefaultString("DISPATCHER_STATUS_URL", "http://192.168.9.61:4010/status"), "/")
+	statusURL := strings.TrimRight(common.GetEnvOrDefaultString("DISPATCHER_STATUS_URL", "http://127.0.0.1:4010/status"), "/")
 	request, err := http.NewRequestWithContext(c.Request.Context(), http.MethodGet, statusURL, nil)
 	if err != nil {
 		c.JSON(http.StatusBadGateway, gin.H{"success": false, "message": "invalid dispatcher status URL"})

@@ -12,8 +12,14 @@ function laneName(value: string) {
   return value.split('/').pop() ?? value
 }
 
+function cooldownLabel(cooldownUntil: number, now: number, ready: string, cooling: string) {
+  const remaining = Math.max(0, cooldownUntil - now)
+  return remaining > 0 ? `${cooling} ${Math.ceil(remaining)}s` : ready
+}
+
 export function DispatcherStatusSection() {
   const { t } = useTranslation()
+  const now = Date.now() / 1000
   const query = useQuery({
     queryKey: ['dispatcher_status'],
     queryFn: getDispatcherStatus,
@@ -57,9 +63,15 @@ export function DispatcherStatusSection() {
                 )}
                 <span className='truncate font-medium'>{laneName(lane.lane)}</span>
               </div>
-              <span className='text-muted-foreground shrink-0'>
-                {lane.success}/{lane.requests} · {paused ? `${lane.paused}s` : t('ready')}
-              </span>
+              <div className='text-muted-foreground flex shrink-0 flex-col items-end gap-0.5'>
+                <span>
+                  {t('Requests')}: {lane.requests} · {t('Success')}: {lane.success} · {t('Errors')}: {lane.errors}
+                </span>
+                <span>
+                  {paused ? `${t('Paused')} ${lane.paused}s` : t('Available')} ·{' '}
+                  {cooldownLabel(lane.cooldown_until, now, t('Ready'), t('Cooling down'))}
+                </span>
+              </div>
             </div>
           )
         })}
