@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
-import { getDispatcherStatus } from '../../api'
+import { getDispatcherStatus } from '../../../api'
 
 function laneName(value: string) {
   return value.split('/').pop() ?? value

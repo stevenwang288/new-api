@@ -1,0 +1,5 @@
+FROM calciumion/new-api:latest
+COPY new-api /new-api
+COPY dist /web/dist
+RUN chmod +x /new-api
+ENTRYPOINT ["/new-api"]
