@@ -113,6 +113,28 @@ export async function getChannelOps(): Promise<ChannelOpsResponse> {
   return res.data
 }
 
+export type DispatcherLaneStatus = {
+  lane: string
+  paused: number
+  cooldown_until: number
+  last_error?: { status?: number; kind?: string; message?: string } | null
+  requests: number
+  success: number
+  errors: number
+  status: Record<string, number>
+}
+
+export type DispatcherStatus = {
+  status: string
+  time?: number
+  lanes: DispatcherLaneStatus[]
+}
+
+export async function getDispatcherStatus(): Promise<DispatcherStatus> {
+  const res = await api.get('/api/channel/dispatcher/status')
+  return res.data
+}
+
 /**
  * Create new channel(s)
  * Supports single, batch, and multi-key modes

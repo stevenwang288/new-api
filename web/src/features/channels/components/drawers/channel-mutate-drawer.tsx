@@ -189,6 +189,7 @@ import {
   ChannelBasicSection,
   ChannelEditorLoadingState,
   ChannelModelsSection,
+  DispatcherStatusSection,
 } from './sections'
 
 type ChannelMutateDrawerProps = {
@@ -3604,8 +3605,8 @@ export function ChannelMutateDrawer({
                     <div
                       id={CHANNEL_EDITOR_SECTION_IDS.advanced}
                       className='scroll-mt-4'
-                    >
-                      <ChannelAdvancedSection
+                      >
+                        <ChannelAdvancedSection
                         open={advancedSettingsOpen}
                         onOpenChange={handleAdvancedSettingsOpenChange}
                         summary={advancedSummary}
@@ -4041,6 +4042,7 @@ export function ChannelMutateDrawer({
                             )
                           )}
                         >
+                          <DispatcherStatusSection />
                           <CardHeading
                             title={t('Channel Extra Settings')}
                             icon={<Settings className='h-4 w-4' />}
