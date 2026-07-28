@@ -115,6 +115,11 @@ export async function getChannelOps(): Promise<ChannelOpsResponse> {
 
 export type DispatcherLaneStatus = {
   lane: string
+  state?: 'READY' | 'COOLDOWN' | 'QUOTA_EXHAUSTED' | 'NETWORK_ERROR' | 'AUTH_ERROR' | 'UNKNOWN_ERROR'
+  pause_reason?: string | null
+  recovery_at?: number | null
+  recovery_source?: 'upstream' | 'estimated' | null
+  remaining_seconds?: number
   paused: number
   cooldown_until: number
   last_error?: { status?: number; kind?: string; message?: string } | null

@@ -4,6 +4,7 @@
 .history
 upload
 *.exe
+new-api-linux
 *.db
 build
 *.db-journal
@@ -34,6 +35,8 @@ electron/dist
 token_estimator_test.go
 skills-lock.json
 .playwright-mcp
+brainstorm-server.*
+.superpowers/brainstorm/
 
 # Local-only live probes and scratch test workspaces.
 .local-tests/

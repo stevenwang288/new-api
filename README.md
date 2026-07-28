@@ -162,6 +162,11 @@ docker run --name new-api -d --restart always \
 
 ## 📚 Documentation
 
+### Project Deployment Notes
+
+- [961 dispatcher and quota deployment](./docs/DEPLOYMENT-961.md)
+- [Hong Kong six-container feasibility assessment](./docs/DEPLOYMENT-HK-6-CONTAINERS.md)
+
 <div align="center">
 
 ### 📖 [Official Documentation](https://docs.newapi.pro/en/docs) | [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/QuantumNous/new-api)
