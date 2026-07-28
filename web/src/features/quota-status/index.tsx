@@ -27,6 +27,12 @@ function laneName(value: string) {
   return value.split('/').pop() ?? value
 }
 
+function statusVariant(state: string, quotaExhausted: boolean) {
+  if (quotaExhausted) return 'destructive'
+  if (state === 'READY') return 'default'
+  return 'outline'
+}
+
 export function QuotaStatusPage() {
   const { t } = useTranslation()
   const user = useAuthStore((state) => state.auth.user)
@@ -87,11 +93,12 @@ export function QuotaStatusPage() {
                 {lanes.map((lane) => {
                   const state = lane.state ?? (lane.paused > 0 ? 'COOLDOWN' : 'READY')
                   const cooling = state !== 'READY' && (lane.recovery_at ?? 0) > now
+                  const quotaExhaustedLane = state === 'QUOTA_EXHAUSTED'
                   return (
                     <Card key={lane.lane} className='p-4'>
                       <div className='flex items-center justify-between gap-3'>
                         <span className='truncate font-medium'>{laneName(lane.lane)}</span>
-                        <Badge variant={state === 'READY' ? 'default' : 'destructive'}>{state}</Badge>
+                        <Badge variant={statusVariant(state, quotaExhaustedLane)}>{state}</Badge>
                       </div>
                       <div className='text-muted-foreground mt-3 space-y-1 text-sm'>
                         <div>{t('Requests')}: {lane.requests} · {t('Success')}: {lane.success} · {t('Errors')}: {lane.errors}</div>

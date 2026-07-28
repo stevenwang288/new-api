@@ -50,13 +50,14 @@ export function DispatcherStatusSection() {
       <div className='grid gap-2 sm:grid-cols-2'>
         {query.data.lanes.map((lane) => {
           const paused = lane.paused > 0
+          const quotaExhausted = lane.state === 'QUOTA_EXHAUSTED'
           return (
             <div
               key={lane.lane}
               className='bg-muted/30 flex items-center justify-between gap-3 rounded-md px-3 py-2 text-xs'
             >
               <div className='flex min-w-0 items-center gap-2'>
-                {paused ? (
+                {quotaExhausted ? (
                   <CircleAlert className='text-destructive h-3.5 w-3.5 shrink-0' aria-hidden='true' />
                 ) : (
                   <CheckCircle2 className='text-emerald-600 h-3.5 w-3.5 shrink-0' aria-hidden='true' />

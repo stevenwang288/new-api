@@ -25,7 +25,9 @@ function formatRemaining(recoveryAt: number | null | undefined, now: number) {
 }
 
 function statusVariant(state: string | undefined) {
-  return state === 'READY' ? 'default' : 'destructive'
+  if (state === 'QUOTA_EXHAUSTED') return 'destructive'
+  if (state === 'READY') return 'default'
+  return 'outline'
 }
 
 export function DispatcherStatusPage() {
@@ -62,11 +64,12 @@ export function DispatcherStatusPage() {
           {query.data.lanes.map((lane) => {
             const state = lane.state ?? (lane.paused > 0 ? 'COOLDOWN' : 'READY')
             const cooling = state !== 'READY' && (lane.recovery_at ?? 0) > now
+            const quotaExhausted = state === 'QUOTA_EXHAUSTED'
             return (
               <Card key={lane.lane} className='p-4'>
                 <div className='flex items-center justify-between gap-3'>
                   <div className='flex min-w-0 items-center gap-2'>
-                    {state === 'READY' ? <CheckCircle2 className='h-4 w-4 text-emerald-600' aria-hidden='true' /> : <CircleAlert className='h-4 w-4 text-destructive' aria-hidden='true' />}
+                    {quotaExhausted ? <CircleAlert className='h-4 w-4 text-destructive' aria-hidden='true' /> : <CheckCircle2 className='h-4 w-4 text-emerald-600' aria-hidden='true' />}
                     <span className='truncate font-medium'>{laneName(lane.lane)}</span>
                   </div>
                   <Badge variant={statusVariant(state)}>{state}</Badge>
