@@ -1,0 +1,46 @@
+services:
+  dispatcher:
+    image: python:3.12-slim
+    container_name: opencode-zen-dispatcher
+    restart: unless-stopped
+    environment:
+      PORT: "4020"
+      API_KEY: sk-1111
+      LANES: http://lane-01:4011,http://lane-02:4012,http://lane-03:4013,http://lane-04:4014,http://lane-05:4015,http://lane-06:4016,http://lane-07:4017,http://lane-08:4018,http://lane-11:4021,http://lane-12:4022,http://lane-13:4023,http://lane-14:4024,http://lane-15:4025,http://lane-16:4026,http://lane-17:4027,http://lane-18:4028,http://lane-19:4029,http://lane-20:4030,http://lane-23:4033,http://lane-24:4034
+    ports: ["4020:4020"]
+    volumes: ["./dispatcher.py:/app/dispatcher.py:ro", "./logs/dispatcher:/logs"]
+    command: ["python", "/app/dispatcher.py"]
+    healthcheck: {test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:4020/health')"], interval: 10s, timeout: 3s, retries: 3}
+    networks: [zen]
+  lane-01: &lane
+    image: python:3.12-slim
+    restart: unless-stopped
+    environment: {PORT: "4011", LANE: "01", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7101, HTTP_PROXY: http://192.168.9.4:7101, NO_PROXY: localhost,127.0.0.1}
+    volumes: ["./lane_proxy.py:/app/lane_proxy.py:ro", "./logs/lane-01:/logs", "/root/.opencode/bin/opencode:/usr/local/bin/opencode:ro"]
+    command: ["sh", "-c", "opencode serve --hostname 127.0.0.1 --port 18001 --pure >/logs/opencode.log 2>&1 & exec python /app/lane_proxy.py"]
+    healthcheck: {test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:4011/health')"], interval: 10s, timeout: 3s, retries: 3}
+    networks: [zen]
+  lane-02: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4012", LANE: "02", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7102, HTTP_PROXY: http://192.168.9.4:7102}}
+  lane-03: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4013", LANE: "03", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7103, HTTP_PROXY: http://192.168.9.4:7103}}
+  lane-04: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4014", LANE: "04", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7104, HTTP_PROXY: http://192.168.9.4:7104}}
+  lane-05: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4015", LANE: "05", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7105, HTTP_PROXY: http://192.168.9.4:7105}}
+  lane-06: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4016", LANE: "06", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7106, HTTP_PROXY: http://192.168.9.4:7106}}
+  lane-07: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4017", LANE: "07", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7107, HTTP_PROXY: http://192.168.9.4:7107}}
+  lane-08: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4018", LANE: "08", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7108, HTTP_PROXY: http://192.168.9.4:7108}}
+  # lane-09: adsl09 line down; reserved (not started)
+  # lane-10: adsl10 line down; reserved (not started)
+  lane-11: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4021", LANE: "11", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7111, HTTP_PROXY: http://192.168.9.4:7111}}
+  lane-12: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4022", LANE: "12", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7112, HTTP_PROXY: http://192.168.9.4:7112}}
+  lane-13: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4023", LANE: "13", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7113, HTTP_PROXY: http://192.168.9.4:7113}}
+  lane-14: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4024", LANE: "14", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7114, HTTP_PROXY: http://192.168.9.4:7114}}
+  lane-15: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4025", LANE: "15", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7115, HTTP_PROXY: http://192.168.9.4:7115}}
+  lane-16: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4026", LANE: "16", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7116, HTTP_PROXY: http://192.168.9.4:7116}}
+  lane-17: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4027", LANE: "17", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7117, HTTP_PROXY: http://192.168.9.4:7117}}
+  lane-18: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4028", LANE: "18", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7118, HTTP_PROXY: http://192.168.9.4:7118}}
+  lane-19: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4029", LANE: "19", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7119, HTTP_PROXY: http://192.168.9.4:7119}}
+  lane-20: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4030", LANE: "20", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7120, HTTP_PROXY: http://192.168.9.4:7120}}
+  # lane-21: reserved (not started)
+  # lane-22: reserved (not started)
+  lane-23: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4033", LANE: "23", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7123, HTTP_PROXY: http://192.168.9.4:7123}}
+  lane-24: {<<: *lane, healthcheck: {disable: true}, environment: {PORT: "4034", LANE: "24", API_KEY: sk-1111, HTTPS_PROXY: http://192.168.9.4:7124, HTTP_PROXY: http://192.168.9.4:7124}}
+networks: {zen: {name: opencode-zen}}
